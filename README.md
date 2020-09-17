@@ -2,6 +2,8 @@
 
 ## Create Bookmarklet
 
+[YouTube demo](https://youtu.be/ZMI3UcyE0Sc)
+
 1. Copy code from rightCapitalBookmarklet.js
 2. Go to https://bookmarklets.org/maker/ to make the bookmarklet
 3. Within RightCapital, click the bookmarklet to activate code
