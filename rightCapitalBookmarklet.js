@@ -1,12 +1,12 @@
-function start() {
+function takeAction() {
   var url = window.location.href
-  var uriIndex = url.lastIndexOf("/")
-  var urlParts = url.substring(uriIndex + 1).split("#")
+  var lastSlashInUri = url.lastIndexOf("/")
+  var urlParts = url.substring(lastSlashInUri + 1).split("#")
 
   makeSelectable()
 
   if (urlParts[0] === "asset-allocation") {
-    endableTargetCategoryMix()
+    enableTargetCategoryMix()
   } else if (urlParts[0] === "cash-flows") {
     getTableTotals(urlParts[1])
   }
@@ -22,7 +22,7 @@ function getTableTotals(urlPart) {
 
 function setTableTotals(data) {
   var totalRow = new Array(data[0].length).fill(0)
-  totalRow[0] = ""
+  totalRow[0] = data[data.length - 1][0]
   totalRow[1] = data[data.length - 1][1]
   data.forEach(function (r) {
     for (var col = 2; col < data[0].length; col++) {
@@ -33,22 +33,25 @@ function setTableTotals(data) {
   var headers = document.querySelectorAll(".custom-header-cell")
 
   totalRow.forEach(function (colTotal, index) {
-    var s = document.createElement("div")
-    s.style.fontSize = "12px"
-    s.innerText = colTotal.toLocaleString("en-US", {
+    var totalElement = document.createElement("div")
+    totalElement.style.fontSize = "12px"
+    if (index === 0) {
+      totalElement.innerText = colTotal
+    }
+    totalElement.innerText = colTotal.toLocaleString("en-US", {
       style: "currency",
       currency: "USD",
       minimumFractionDigits: 0,
       maximumFractionDigits: 0,
     })
-    var h = document.createElement("div")
-    h.style.fontSize = "12px"
+    var headerElement = document.createElement("div")
+    headerElement.style.fontSize = "12px"
     if (headers[index]) {
-      h.innerText = headers[index].innerText
+      headerElement.innerText = headers[index].innerText
       headers[index].style.flexFlow = "column"
       headers[index].innerText = ""
-      headers[index].append(h)
-      headers[index].append(s)
+      headers[index].append(headerElement)
+      headers[index].append(totalElement)
     }
   })
 }
@@ -63,7 +66,7 @@ function getData(obj, objId) {
   }
 }
 
-function endableTargetCategoryMix() {
+function enableTargetCategoryMix() {
   document.getElementsByName(
     "investment_target_category_mix_id"
   )[0].disabled = false
@@ -75,14 +78,15 @@ function makeSelectable() {
     item.removeAttribute("unselectable")
   })
 
-  var unselectables = document.querySelectorAll(".ag-unselectable")
-  Array.from(unselectables).forEach(function (item) {
+  var agUnselectables = document.querySelectorAll(".ag-unselectable")
+  Array.from(agUnselectables).forEach(function (item) {
     item.classList.remove("ag-unselectable")
   })
 }
 
-start()
+// Now run code
+takeAction()
 
 window.addEventListener("hashchange", function () {
-  start()
+  takeAction()
 })
