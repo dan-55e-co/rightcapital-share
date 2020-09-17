@@ -37,13 +37,14 @@ function setTableTotals(data) {
     totalElement.style.fontSize = "12px"
     if (index === 0) {
       totalElement.innerText = colTotal
+    } else {
+      totalElement.innerText = colTotal.toLocaleString("en-US", {
+        style: "currency",
+        currency: "USD",
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0,
+      })
     }
-    totalElement.innerText = colTotal.toLocaleString("en-US", {
-      style: "currency",
-      currency: "USD",
-      minimumFractionDigits: 0,
-      maximumFractionDigits: 0,
-    })
     var headerElement = document.createElement("div")
     headerElement.style.fontSize = "12px"
     if (headers[index]) {
